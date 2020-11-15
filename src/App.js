@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from "./Redux/reducer";
+import Element from "./Components/Elements";
 
 function App() {
+  const store = createStore(reducer);
+
+  store.subscribe(() => {
+    localStorage.setItem("elements", JSON.stringify(store.getState()));
+  });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <DndProvider backend={HTML5Backend}>
+        <Element />
+      </DndProvider>
+    </Provider>
   );
 }
 
